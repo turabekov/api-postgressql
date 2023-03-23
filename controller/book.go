@@ -62,7 +62,6 @@ func (c *Controller) CreateBook(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) GetListBook(w http.ResponseWriter, r *http.Request) {
-
 	var (
 		val    = r.URL.Query()
 		limit  int
@@ -114,7 +113,6 @@ func (c *Controller) GetListBook(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) UpdateBook(w http.ResponseWriter, r *http.Request) {
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		c.HandleFuncResponse(w, "Update Book", 400, err.Error())
@@ -126,6 +124,14 @@ func (c *Controller) UpdateBook(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &updateBook)
 	if err != nil {
 		c.HandleFuncResponse(w, "Update book unmarshal json", http.StatusBadRequest, err.Error())
+		return
+	}
+
+	_, err = c.store.Book().GetByID(&models.BookPrimaryKey{
+		Id: updateBook.Id,
+	})
+	if err != nil {
+		c.HandleFuncResponse(w, "Book not found", http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -153,7 +159,6 @@ func (c *Controller) UpdateBook(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) DeleteBook(w http.ResponseWriter, r *http.Request) {
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		c.HandleFuncResponse(w, "Delete Book", 400, err.Error())
@@ -165,6 +170,14 @@ func (c *Controller) DeleteBook(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &idObj)
 	if err != nil {
 		c.HandleFuncResponse(w, "Delete book unmarshal json", http.StatusBadRequest, err.Error())
+		return
+	}
+
+	_, err = c.store.Book().GetByID(&models.BookPrimaryKey{
+		Id: idObj.Id,
+	})
+	if err != nil {
+		c.HandleFuncResponse(w, "Book not found", http.StatusNotFound, err.Error())
 		return
 	}
 

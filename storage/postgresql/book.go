@@ -124,7 +124,7 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 	}
 
 	if req.Offset > 0 {
-		offset = fmt.Sprintf(" OFFSET %d", req.Offset)
+		offset = fmt.Sprintf(" OFFSE T %d", req.Offset)
 	}
 
 	if req.Limit > 0 {

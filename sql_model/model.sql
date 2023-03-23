@@ -16,4 +16,4 @@ CREATE TABLE "author" (
 );
 
 
-ALTER TABLE "book" ADD COLUMN author_id UUID NOT NULL REFERENCES book(id);
+ALTER TABLE "book" ADD COLUMN author_id UUID NOT NULL REFERENCES author(id);

@@ -9,7 +9,6 @@ import (
 )
 
 func (c *Controller) AuthorController(w http.ResponseWriter, r *http.Request) {
-
 	switch r.Method {
 	case "POST":
 		c.CreateAuthor(w, r)
@@ -128,7 +127,7 @@ func (c *Controller) UpdateAuthor(w http.ResponseWriter, r *http.Request) {
 		c.HandleFuncResponse(w, "Update author unmarshal json", http.StatusBadRequest, err.Error())
 		return
 	}
-
+	// check existing of author
 	_, err = c.store.Author().GetByID(&models.AuthorPrimaryKey{
 		Id: updateAuthor.Id,
 	})
