@@ -1,7 +1,7 @@
 package storage
 
 import (
-	"app/models"
+	"app/api/models"
 )
 
 type StorageI interface {

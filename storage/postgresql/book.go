@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"app/models"
+	"app/api/models"
 )
 
 type bookRepo struct {

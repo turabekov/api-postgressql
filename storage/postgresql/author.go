@@ -1,7 +1,7 @@
 package postgresql
 
 import (
-	"app/models"
+	"app/api/models"
 	"database/sql"
 	"fmt"
 

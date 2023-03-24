@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"app/models"
+	"app/api/models"
 	"app/pkg/helper"
 	"net/http"
 
