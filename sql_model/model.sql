@@ -16,4 +16,9 @@ CREATE TABLE "author" (
 );
 
 
-ALTER TABLE "book" ADD COLUMN author_id UUID NOT NULL REFERENCES author(id);
+-- ALTER TABLE "book" ADD COLUMN author_id UUID NOT NULL REFERENCES author(id);
+CREATE TABLE "user" {
+    "id" UUID PRIMARY KEY NOT NULL,
+    "name" VARCHAR NOT NULL,
+    "balance" NUMERIC CHECK(balance > 0),
+}

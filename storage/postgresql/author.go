@@ -18,7 +18,6 @@ func NewAuthorRepo(db *sql.DB) *authorRepo {
 	}
 }
 func (r *authorRepo) Create(req *models.CreateAuthor) (string, error) {
-
 	var (
 		query string
 		id    = uuid.New()
@@ -37,7 +36,6 @@ func (r *authorRepo) Create(req *models.CreateAuthor) (string, error) {
 		id.String(),
 		req.Name,
 	)
-
 	if err != nil {
 		return "", err
 	}
@@ -68,7 +66,6 @@ func (r *authorRepo) GetByID(req *models.AuthorPrimaryKey) (*models.Author, erro
 		&author.CreatedAt,
 		&author.UpdatedAt,
 	)
-
 	if err != nil {
 		return nil, err
 	}
@@ -111,17 +108,13 @@ func (r *authorRepo) GetList(req *models.GetListAuthorRequest) (resp *models.Get
 
 	query += filter + offset + limit
 
-	fmt.Println(":::Query:", query)
-
 	rows, err := r.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
-
 	defer rows.Close()
 
 	for rows.Next() {
-
 		var author models.Author
 		err = rows.Scan(
 			&resp.Count,
@@ -130,7 +123,6 @@ func (r *authorRepo) GetList(req *models.GetListAuthorRequest) (resp *models.Get
 			&author.CreatedAt,
 			&author.UpdatedAt,
 		)
-
 		if err != nil {
 			return nil, err
 		}
@@ -141,7 +133,7 @@ func (r *authorRepo) GetList(req *models.GetListAuthorRequest) (resp *models.Get
 	return resp, nil
 }
 
-func (r *authorRepo) Update(req *models.UpdateAuthor) (res *models.AuthorPrimaryKey, err error) {
+func (r *authorRepo) Update(req *models.UpdateAuthor) (int64, error) {
 	var (
 		name   string
 		filter = " WHERE id = '" + req.Id + "'"
@@ -157,33 +149,36 @@ func (r *authorRepo) Update(req *models.UpdateAuthor) (res *models.AuthorPrimary
 	}
 
 	query += name + " updated_at = now() " + filter
-	fmt.Println(":::Query:", query)
-	_, err = r.db.Exec(query)
 
+	result, err := r.db.Exec(query)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	id := models.AuthorPrimaryKey{
-		Id: req.Id,
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, err
 	}
 
-	return &id, nil
+	return rowsAffected, nil
 }
 
-func (r *authorRepo) Delete(req *models.AuthorPrimaryKey) (err error) {
+func (r *authorRepo) Delete(req *models.AuthorPrimaryKey) (int64, error) {
 	query := `
 		DELETE 
 		FROM author
 		WHERE id = $1
 	`
 
-	_, err = r.db.Exec(query, req.Id)
-
-	fmt.Println(":::Query:", query)
+	result, err := r.db.Exec(query, req.Id)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return rowsAffected, nil
 }

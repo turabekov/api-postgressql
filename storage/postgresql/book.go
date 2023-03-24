@@ -124,7 +124,7 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 	}
 
 	if req.Offset > 0 {
-		offset = fmt.Sprintf(" OFFSE T %d", req.Offset)
+		offset = fmt.Sprintf(" OFFSET %d", req.Offset)
 	}
 
 	if req.Limit > 0 {
@@ -168,7 +168,7 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 	return resp, nil
 }
 
-func (r *bookRepo) Update(req *models.Book) (res *models.BookPrimaryKey, err error) {
+func (r *bookRepo) Update(req *models.UpdateBook) (int64, error) {
 	var (
 		name      string
 		price     string
@@ -193,33 +193,39 @@ func (r *bookRepo) Update(req *models.Book) (res *models.BookPrimaryKey, err err
 
 	query += name + price + author_id + " updated_at = now() " + filter
 	fmt.Println(":::Query:", query)
-	_, err = r.db.Exec(query)
+	result, err := r.db.Exec(query)
 
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	id := models.BookPrimaryKey{
-		Id: req.Id,
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, err
 	}
 
-	return &id, nil
+	return rowsAffected, nil
 }
 
-func (r *bookRepo) Delete(req *models.BookPrimaryKey) (err error) {
+func (r *bookRepo) Delete(req *models.BookPrimaryKey) (int64, error) {
 	query := `
 		DELETE 
 		FROM book
 		WHERE id = $1
 	`
 
-	_, err = r.db.Exec(query, req.Id)
+	result, err := r.db.Exec(query, req.Id)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return rowsAffected, nil
 }
 
 // Author

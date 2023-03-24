@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 
+	"github.com/gin-gonic/gin"
+
+	"app/api"
 	"app/config"
-	"app/controller"
 	"app/storage/postgresql"
 )
 
@@ -21,14 +22,12 @@ func main() {
 
 	defer store.CloseDB()
 
-	newController := controller.NewController(&cfg, store)
+	r := gin.New()
 
-	http.HandleFunc("/book", newController.BookController)
-	http.HandleFunc("/author", newController.AuthorController)
+	api.NewApi(r, &cfg, store)
 
-
-	fmt.Println("Listening Server", cfg.ServerHost+cfg.ServerPort)
-	err = http.ListenAndServe(cfg.ServerHost+cfg.ServerPort, nil)
+	fmt.Println("Server Listening port", cfg.ServerHost+cfg.ServerPort)
+	err = r.Run(cfg.ServerHost + cfg.ServerPort)
 	if err != nil {
 		log.Println("Error listening server:", err.Error())
 		return

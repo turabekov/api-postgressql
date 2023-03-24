@@ -7,6 +7,14 @@ type Author struct {
 	UpdatedAt string `json:"updated_at"`
 }
 
+type AuthorBooks struct {
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
+	Books     []Book `json:"books"`
+}
+
 type AuthorPrimaryKey struct {
 	Id string `json:"id"`
 }
@@ -28,5 +36,5 @@ type GetListAuthorRequest struct {
 
 type GetListAuthorResponse struct {
 	Count   int       `json:"count"`
-	Authors []*Author `json:"books"`
+	Authors []*Author `json:"authors"`
 }

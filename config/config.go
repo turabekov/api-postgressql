@@ -9,6 +9,9 @@ type Config struct {
 	PostgresDatabase string
 	PostgresPassword string
 	PostgresPort     string
+
+	DefaultOffset int
+	DefaultLimit  int
 }
 
 func Load() Config {
@@ -22,6 +25,8 @@ func Load() Config {
 	cfg.PostgresDatabase = "shopcart"
 	cfg.PostgresPassword = "admin@111"
 	cfg.PostgresPort = "5432"
+	cfg.DefaultOffset = 0
+	cfg.DefaultLimit = 10
 
 	return cfg
 }
