@@ -192,15 +192,9 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 	return resp, nil
 }
 
-func (r *bookRepo) Update(req *models.UpdateBook) (int64, error) {
+func (r *bookRepo) Update(req *map[string]interface{}) (int64, error) {
 	var (
-		name         string
-		incomePrice  string
-		profitStatus string
-		profitPrice  string
-		sellPrice    string
-		author_id    string
-		filter       = " WHERE id = '" + req.Id + "'"
+		filter string
 	)
 
 	query := `
@@ -208,29 +202,17 @@ func (r *bookRepo) Update(req *models.UpdateBook) (int64, error) {
 		book
 		SET
 	`
-	if len(req.Name) > 0 {
-		name = " name = '" + req.Name + "', "
-	}
-	if req.Count > 0 {
-		name = fmt.Sprintf(" count = %d ,", req.Count)
-	}
-	if req.IncomePrice > 0 {
-		incomePrice = fmt.Sprintf(" income_price = %f ,", req.IncomePrice)
-	}
-	if len(req.ProfitStatus) > 0 {
-		profitStatus = fmt.Sprintf(" profit_status = %s ,", req.ProfitStatus)
-	}
-	if req.ProfitPrice > 0 {
-		profitPrice = fmt.Sprintf(" profit_price = %f ,", req.ProfitPrice)
-	}
-	if req.SellPrice > 0 {
-		sellPrice = fmt.Sprintf(" sell_price = %f ,", req.SellPrice)
-	}
-	if len(req.AuthorId) > 0 {
-		author_id = " author_id = '" + req.AuthorId + "', "
+	for key, val := range *req {
+		if key == "id" {
+			filter = fmt.Sprintf(" WHERE id = '%v'", val)
+		} else if key == "count" || key == "income_price" || key == "profit_price" || key == "sell_price" {
+			query += fmt.Sprintf(" %s = %v ,", key, val)
+		} else {
+			query += fmt.Sprintf(" %s = '%v' ,", key, val)
+		}
 	}
 
-	query += name + incomePrice + profitStatus + profitPrice + author_id + sellPrice + " updated_at = now() " + filter
+	query += " updated_at = now() " + filter
 	fmt.Println(":::Query:", query)
 	result, err := r.db.Exec(query)
 

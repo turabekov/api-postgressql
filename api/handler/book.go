@@ -18,7 +18,7 @@ func (h *Handler) CreateBook(c *gin.Context) {
 		return
 	}
 
-	// check status
+	// check status and calc sellprice
 	if createBook.ProfitStatus == "fixed" && createBook.ProfitPrice >= 0 {
 		createBook.SellPrice = createBook.IncomePrice + createBook.ProfitPrice
 	} else if createBook.ProfitStatus == "precent" && createBook.ProfitPrice >= 0 {
@@ -90,7 +90,8 @@ func (h *Handler) GetListBook(c *gin.Context) {
 
 func (h *Handler) UpdateBook(c *gin.Context) {
 
-	var updateBook models.UpdateBook
+	// var updateBook models.UpdateBook
+	var body map[string]interface{}
 
 	id := c.Param("id")
 
@@ -99,15 +100,15 @@ func (h *Handler) UpdateBook(c *gin.Context) {
 		return
 	}
 
-	err := c.ShouldBindJSON(&updateBook)
+	err := c.ShouldBindJSON(&body)
 	if err != nil {
 		h.handlerResponse(c, "update book", http.StatusBadRequest, err.Error())
 		return
 	}
 
-	updateBook.Id = id
+	body["id"] = id
 
-	rowsAffected, err := h.storages.Book().Update(&updateBook)
+	rowsAffected, err := h.storages.Book().Update(&body)
 	if err != nil {
 		h.handlerResponse(c, "storage.book.update", http.StatusInternalServerError, err.Error())
 		return

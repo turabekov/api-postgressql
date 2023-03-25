@@ -15,7 +15,7 @@ type BookRepoI interface {
 	Create(*models.CreateBook) (string, error)
 	GetByID(*models.BookPrimaryKey) (*models.GetBookRes, error)
 	GetList(*models.GetListBookRequest) (*models.GetListBookResponse, error)
-	Update(req *models.UpdateBook) (int64, error)
+	Update(req *map[string]interface{}) (int64, error)
 	Delete(req *models.BookPrimaryKey) (int64, error)
 }
 
