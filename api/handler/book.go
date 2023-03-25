@@ -18,6 +18,16 @@ func (h *Handler) CreateBook(c *gin.Context) {
 		return
 	}
 
+	// check status
+	if createBook.ProfitStatus == "fixed" && createBook.ProfitPrice >= 0 {
+		createBook.SellPrice = createBook.IncomePrice + createBook.ProfitPrice
+	} else if createBook.ProfitStatus == "precent" && createBook.ProfitPrice >= 0 {
+		createBook.SellPrice = createBook.IncomePrice + createBook.IncomePrice*createBook.ProfitPrice/100
+	} else {
+		h.handlerResponse(c, "create book", http.StatusBadRequest, "given status incorrect")
+		return
+	}
+
 	id, err := h.storages.Book().Create(&createBook)
 	if err != nil {
 		h.handlerResponse(c, "storage.book.create", http.StatusInternalServerError, err.Error())
@@ -136,5 +146,5 @@ func (h *Handler) DeleteBook(c *gin.Context) {
 		return
 	}
 
-	h.handlerResponse(c, "update book", http.StatusAccepted, nil)
+	h.handlerResponse(c, "update book", http.StatusNoContent, nil)
 }

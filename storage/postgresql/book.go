@@ -30,17 +30,25 @@ func (r *bookRepo) Create(req *models.CreateBook) (string, error) {
 		INSERT INTO book(
 			id, 
 			name, 
-			price, 
+			count,
+			income_price,
+			profit_status,
+			profit_price,
+			sell_price,
 			author_id,
 			updated_at
 		)
-		VALUES ($1, $2, $3, $4, now())
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, now())
 	`
 
 	_, err := r.db.Exec(query,
 		id.String(),
 		req.Name,
-		req.Price,
+		req.Count,
+		req.IncomePrice,
+		req.ProfitStatus,
+		req.ProfitPrice,
+		req.SellPrice,
 		req.AuthorId,
 	)
 
@@ -62,7 +70,11 @@ func (r *bookRepo) GetByID(req *models.BookPrimaryKey) (*models.GetBookRes, erro
 		SELECT
 			book.id,
 			book.name,
-			book.price,
+			book.count,
+			book.income_price,
+			book.profit_status,
+			book.profit_price,
+			book.sell_price,
 			book.created_at,
 			book.updated_at,
 			author.id,
@@ -77,7 +89,11 @@ func (r *bookRepo) GetByID(req *models.BookPrimaryKey) (*models.GetBookRes, erro
 	err := r.db.QueryRow(query, req.Id).Scan(
 		&getBookRes.Id,
 		&getBookRes.Name,
-		&getBookRes.Price,
+		&getBookRes.Count,
+		&getBookRes.IncomePrice,
+		&getBookRes.ProfitStatus,
+		&getBookRes.ProfitPrice,
+		&getBookRes.SellPrice,
 		&getBookRes.CreatedAt,
 		&getBookRes.UpdatedAt,
 		&getBookRes.Author.Id,
@@ -108,7 +124,11 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 			COUNT(*) OVER(),
 			book.id,
 			book.name,
-			book.price,
+			book.count,
+			book.income_price,
+			book.profit_status,
+			book.profit_price,
+			book.sell_price,
 			book.created_at,
 			book.updated_at,
 			author.id,
@@ -149,7 +169,11 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 			&resp.Count,
 			&book.Id,
 			&book.Name,
-			&book.Price,
+			&book.Count,
+			&book.IncomePrice,
+			&book.ProfitStatus,
+			&book.ProfitPrice,
+			&book.SellPrice,
 			&book.CreatedAt,
 			&book.UpdatedAt,
 			&book.Author.Id,
@@ -170,10 +194,13 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 
 func (r *bookRepo) Update(req *models.UpdateBook) (int64, error) {
 	var (
-		name      string
-		price     string
-		author_id string
-		filter    = " WHERE id = '" + req.Id + "'"
+		name         string
+		incomePrice  string
+		profitStatus string
+		profitPrice  string
+		sellPrice    string
+		author_id    string
+		filter       = " WHERE id = '" + req.Id + "'"
 	)
 
 	query := `
@@ -184,14 +211,26 @@ func (r *bookRepo) Update(req *models.UpdateBook) (int64, error) {
 	if len(req.Name) > 0 {
 		name = " name = '" + req.Name + "', "
 	}
-	if req.Price > 0 {
-		price = fmt.Sprintf(" price = %f ,", req.Price)
+	if req.Count > 0 {
+		name = fmt.Sprintf(" count = %d ,", req.Count)
+	}
+	if req.IncomePrice > 0 {
+		incomePrice = fmt.Sprintf(" income_price = %f ,", req.IncomePrice)
+	}
+	if len(req.ProfitStatus) > 0 {
+		profitStatus = fmt.Sprintf(" profit_status = %s ,", req.ProfitStatus)
+	}
+	if req.ProfitPrice > 0 {
+		profitPrice = fmt.Sprintf(" profit_price = %f ,", req.ProfitPrice)
+	}
+	if req.SellPrice > 0 {
+		sellPrice = fmt.Sprintf(" sell_price = %f ,", req.SellPrice)
 	}
 	if len(req.AuthorId) > 0 {
 		author_id = " author_id = '" + req.AuthorId + "', "
 	}
 
-	query += name + price + author_id + " updated_at = now() " + filter
+	query += name + incomePrice + profitStatus + profitPrice + author_id + sellPrice + " updated_at = now() " + filter
 	fmt.Println(":::Query:", query)
 	result, err := r.db.Exec(query)
 
@@ -215,7 +254,6 @@ func (r *bookRepo) Delete(req *models.BookPrimaryKey) (int64, error) {
 	`
 
 	result, err := r.db.Exec(query, req.Id)
-
 	if err != nil {
 		return 0, err
 	}
@@ -227,29 +265,3 @@ func (r *bookRepo) Delete(req *models.BookPrimaryKey) (int64, error) {
 
 	return rowsAffected, nil
 }
-
-// Author
-//   id
-//   name
-
-// Book
-//   id
-//   name
-//   price
-//   author_id = 1243256
-
-// /book [GET]
-//   {
-//     "count": 1,
-//     "books": [
-//       {
-//         "id": "ea4f35e9-c5ea-40b5-8b94-4db5c19c1243",
-//         "name": "Learning golang",
-//         "price": 400000,
-//         "author": {
-//           "id": "4e5657fe-d6ff-4fb3-8102-15d8c5b4efb3",
-//           "name": "John Bodner"
-//         }
-//       }
-//     ]
-//   }

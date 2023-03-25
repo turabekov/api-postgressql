@@ -8,6 +8,7 @@ type StorageI interface {
 	CloseDB()
 	Book() BookRepoI
 	Author() AuthorRepoI
+	User() UserRepoI
 }
 
 type BookRepoI interface {
@@ -24,4 +25,12 @@ type AuthorRepoI interface {
 	GetList(req *models.GetListAuthorRequest) (resp *models.GetListAuthorResponse, err error)
 	Update(req *models.UpdateAuthor) (int64, error)
 	Delete(req *models.AuthorPrimaryKey) (int64, error)
+}
+
+type UserRepoI interface {
+	Create(req *models.CreateUser) (string, error)
+	GetByID(req *models.UserPrimaryKey) (*models.User, error)
+	GetList(req *models.GetListUserRequest) (resp *models.GetListUserResponse, err error)
+	Update(req *models.UpdateUser) (int64, error)
+	Delete(req *models.UserPrimaryKey) (int64, error)
 }
