@@ -153,8 +153,6 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 
 	query += filter + offset + limit
 
-	fmt.Println(":::Query:", query)
-
 	rows, err := r.db.Query(query)
 	if err != nil {
 		return nil, err
@@ -189,6 +187,8 @@ func (r *bookRepo) GetList(req *models.GetListBookRequest) (resp *models.GetList
 		resp.Books = append(resp.Books, &book)
 	}
 
+	resp.Count = len(resp.Books)
+
 	return resp, nil
 }
 
@@ -213,7 +213,6 @@ func (r *bookRepo) Update(req *map[string]interface{}) (int64, error) {
 	}
 
 	query += " updated_at = now() " + filter
-	fmt.Println(":::Query:", query)
 	result, err := r.db.Exec(query)
 
 	if err != nil {

@@ -5,7 +5,11 @@ import (
 	"app/config"
 	"app/storage"
 
+	_ "app/api/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func NewApi(r *gin.Engine, cfg *config.Config, store storage.StorageI) {
@@ -32,4 +36,6 @@ func NewApi(r *gin.Engine, cfg *config.Config, store storage.StorageI) {
 	r.PUT("/user/:id", handler.UpdateUser)
 	r.DELETE("/user/:id", handler.DeleteUser)
 
+	url := ginSwagger.URL("swagger/doc.json") // The url pointing to API definition
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 }

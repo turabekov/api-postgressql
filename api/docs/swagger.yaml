@@ -1,0 +1,555 @@
+definitions:
+  handler.Response:
+    properties:
+      data: {}
+      description:
+        type: string
+      status:
+        type: integer
+    type: object
+  models.AuthorPrimaryKey:
+    properties:
+      id:
+        type: string
+    type: object
+  models.BookPrimaryKey:
+    properties:
+      id:
+        type: string
+    type: object
+  models.CreateAuthor:
+    properties:
+      name:
+        type: string
+    type: object
+  models.CreateBook:
+    properties:
+      author_id:
+        type: string
+      count:
+        type: integer
+      income_price:
+        type: number
+      name:
+        type: string
+      profit_price:
+        type: number
+      profit_status:
+        type: string
+      sell_price:
+        type: number
+    type: object
+  models.UpdateAuthor:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  models.UpdateBook:
+    properties:
+      author_id:
+        type: string
+      count:
+        type: integer
+      id:
+        type: string
+      income_price:
+        type: number
+      name:
+        type: string
+      profit_price:
+        type: number
+      profit_status:
+        type: string
+      sell_price:
+        type: number
+    type: object
+info:
+  contact: {}
+paths:
+  /author:
+    get:
+      consumes:
+      - application/json
+      description: Get List Author
+      operationId: get_list_author
+      parameters:
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: string
+      - description: search
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get List Author
+      tags:
+      - Author
+    post:
+      consumes:
+      - application/json
+      description: Create author
+      operationId: create_author
+      parameters:
+      - description: CreateAuthorRequest
+        in: body
+        name: author
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateAuthor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create author
+      tags:
+      - Author
+  /author/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Author
+      operationId: delete_author
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: DeleteAuthorRequest
+        in: body
+        name: author
+        required: true
+        schema:
+          $ref: '#/definitions/models.AuthorPrimaryKey'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete Author
+      tags:
+      - Author
+    get:
+      consumes:
+      - application/json
+      description: Get By ID Author
+      operationId: get_by_id_author
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get By ID Author
+      tags:
+      - Author
+    put:
+      consumes:
+      - application/json
+      description: Update Author
+      operationId: update_author
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: UpdateAuthorRequest
+        in: body
+        name: author
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateAuthor'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update Author
+      tags:
+      - Author
+  /book:
+    get:
+      consumes:
+      - application/json
+      description: Get List Book
+      operationId: get_list_book
+      parameters:
+      - description: offset
+        in: query
+        name: offset
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: string
+      - description: search
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get List Book
+      tags:
+      - Book
+    post:
+      consumes:
+      - application/json
+      description: Create Book
+      operationId: create_book
+      parameters:
+      - description: CreateBookRequest
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateBook'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Create Book
+      tags:
+      - Book
+  /book/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Book
+      operationId: delete_book
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: DeleteBookRequest
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.BookPrimaryKey'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Delete Book
+      tags:
+      - Book
+    get:
+      consumes:
+      - application/json
+      description: Get By ID Book
+      operationId: get_by_id_book
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Get By ID Book
+      tags:
+      - Book
+    patch:
+      consumes:
+      - application/json
+      description: Update Book
+      operationId: update_book
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: UpdateBookRequest
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateBook'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Success Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "500":
+          description: Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Update Book
+      tags:
+      - Book
+swagger: "2.0"

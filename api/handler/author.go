@@ -8,6 +8,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Create Author godoc
+// @ID create_author
+// @Router /author [POST]
+// @Summary Create author
+// @Description Create author
+// @Tags Author
+// @Accept json
+// @Produce json
+// @Param author body models.CreateAuthor true "CreateAuthorRequest"
+// @Success 200 {object} Response{data=string} "Success Request"
+// @Response 400 {object} Response{data=string} "Bad Request"
+// @Failure 500 {object} Response{data=string} "Server Error"
 func (h *Handler) CreateAuthor(c *gin.Context) {
 
 	var createAuthor models.CreateAuthor
@@ -33,6 +45,18 @@ func (h *Handler) CreateAuthor(c *gin.Context) {
 	h.handlerResponse(c, "create author", http.StatusCreated, resp)
 }
 
+// Get By ID Author godoc
+// @ID get_by_id_author
+// @Router /author/{id} [GET]
+// @Summary Get By ID Author
+// @Description Get By ID Author
+// @Tags Author
+// @Accept json
+// @Produce json
+// @Param id path string true "id"
+// @Success 200 {object} Response{data=string} "Success Request"
+// @Response 400 {object} Response{data=string} "Bad Request"
+// @Failure 500 {object} Response{data=string} "Server Error"
 func (h *Handler) GetByIdAuthor(c *gin.Context) {
 	id := c.Param("id")
 
@@ -50,6 +74,20 @@ func (h *Handler) GetByIdAuthor(c *gin.Context) {
 	h.handlerResponse(c, "get author by id", http.StatusCreated, resp)
 }
 
+// Get List Author godoc
+// @ID get_list_author
+// @Router /author [GET]
+// @Summary Get List Author
+// @Description Get List Author
+// @Tags Author
+// @Accept json
+// @Produce json
+// @Param offset query string false "offset"
+// @Param limit query string false "limit"
+// @Param search query string false "search"
+// @Success 200 {object} Response{data=string} "Success Request"
+// @Response 400 {object} Response{data=string} "Bad Request"
+// @Failure 500 {object} Response{data=string} "Server Error"
 func (h *Handler) GetListAuthor(c *gin.Context) {
 
 	offset, err := h.getOffsetQuery(c.Query("offset"))
@@ -77,6 +115,19 @@ func (h *Handler) GetListAuthor(c *gin.Context) {
 	h.handlerResponse(c, "get list author response", http.StatusOK, resp)
 }
 
+// Update Author godoc
+// @ID update_author
+// @Router /author/{id} [PUT]
+// @Summary Update Author
+// @Description Update Author
+// @Tags Author
+// @Accept json
+// @Produce json
+// @Param id path string true "id"
+// @Param author body models.UpdateAuthor true "UpdateAuthorRequest"
+// @Success 202 {object} Response{data=string} "Success Request"
+// @Response 400 {object} Response{data=string} "Bad Request"
+// @Failure 500 {object} Response{data=string} "Server Error"
 func (h *Handler) UpdateAuthor(c *gin.Context) {
 
 	var updateAuthor models.UpdateAuthor
@@ -116,6 +167,19 @@ func (h *Handler) UpdateAuthor(c *gin.Context) {
 	h.handlerResponse(c, "update author", http.StatusAccepted, resp)
 }
 
+// DELETE Author godoc
+// @ID delete_author
+// @Router /author/{id} [DELETE]
+// @Summary Delete Author
+// @Description Delete Author
+// @Tags Author
+// @Accept json
+// @Produce json
+// @Param id path string true "id"
+// @Param author body models.AuthorPrimaryKey true "DeleteAuthorRequest"
+// @Success 204 {object} Response{data=string} "Success Request"
+// @Response 400 {object} Response{data=string} "Bad Request"
+// @Failure 500 {object} Response{data=string} "Server Error"
 func (h *Handler) DeleteAuthor(c *gin.Context) {
 
 	id := c.Param("id")
@@ -137,3 +201,5 @@ func (h *Handler) DeleteAuthor(c *gin.Context) {
 
 	h.handlerResponse(c, "update author", http.StatusAccepted, nil)
 }
+
+// file upload gin

@@ -1,4 +1,3 @@
-
 CREATE TABLE "book" (
     "id" UUID PRIMARY KEY,
     "name" VARCHAR NOT NULL,
@@ -11,20 +10,3 @@ CREATE TABLE "book" (
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP
 );
-
-CREATE TABLE "author" (
-    "id" UUID PRIMARY KEY NOT NULL,
-    "name" VARCHAR NOT NULL,
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP
-);
-
-
--- ALTER TABLE "book" ADD COLUMN author_id UUID NOT NULL REFERENCES author(id);
-CREATE TABLE "users" (
-    "id" UUID PRIMARY KEY NOT NULL,
-    "name" VARCHAR NOT NULL,
-    "balance" NUMERIC CHECK(balance >= 0) DEFAULT 0,
-    "updated_at" TIMESTAMP,
-    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
